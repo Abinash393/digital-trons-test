@@ -9,12 +9,12 @@ import (
 
 type User struct {
 	gorm.Model
-	ID        uint
-	Name      string
-	Email     string `gorm:"uniqueIndex"`
-	Password  string
-	CreatedAt time.Time
-	UpdatedAt time.Time
+	ID        uint      `json:"id"`
+	Name      string    `json:"name"`
+	Email     string    `json:"email" gorm:"uniqueIndex"`
+	Password  string    `json:"password"`
+	CreatedAt time.Time `json:"createdAt"`
+	UpdatedAt time.Time `json:"updatedAt"`
 }
 
 func (u *User) BeforeCreate(db *gorm.DB) (err error) {
