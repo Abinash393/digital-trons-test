@@ -1,6 +1,9 @@
 package model
 
 func Seed() {
+	user := User{Name: "Jon Doe", Email: "jon@test.com", Password: "qwerty"}
+	DB.Create(&user)
+
 	rootFolder := Folder{ID: 1, Name: "root", ParaintFolderID: 1}
 	DB.Create(&rootFolder)
 }
