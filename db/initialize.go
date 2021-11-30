@@ -1,16 +1,16 @@
-package model
+package db
 
 import (
 	"gorm.io/driver/postgres"
 	"gorm.io/gorm"
 )
 
-var DB *gorm.DB
+var ORM *gorm.DB
 
-func InitializeDB() {
+func Initialize() {
 	dsn := "host=localhost user=root password=password dbname=trons port=5432 sslmode=disable"
 	var err error
-	DB, err = gorm.Open(postgres.Open(dsn), &gorm.Config{})
+	ORM, err = gorm.Open(postgres.Open(dsn), &gorm.Config{})
 	if err != nil {
 		panic(err)
 	}

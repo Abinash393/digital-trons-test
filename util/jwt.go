@@ -2,7 +2,9 @@ package util
 
 import (
 	"Abinash393/digital-trons-test/model"
+	"fmt"
 	"log"
+	"time"
 
 	"github.com/dgrijalva/jwt-go"
 )
@@ -11,8 +13,8 @@ const secret = "ultraSecret"
 
 func GenerateToken(user *model.User) string {
 	claims := jwt.MapClaims{
-		"UID": user.ID,
-		"EXP": 15000,
+		"uid": user.ID,
+		"exp": time.Now().Add(time.Hour * 48).Unix(),
 	}
 
 	token := jwt.NewWithClaims(jwt.SigningMethodHS256, claims)
@@ -25,14 +27,20 @@ func GenerateToken(user *model.User) string {
 	return signedToken
 }
 
-func DecodeToken(tokenString string) jwt.MapClaims {
+func DecodeToken(tokenString string) interface{} {
 	token, err := jwt.Parse(tokenString, func(token *jwt.Token) (interface{}, error) {
-		return secret, nil
+		if _, ok := token.Method.(*jwt.SigningMethodHMAC); !ok {
+			return nil, fmt.Errorf("unexpected signing method: %v", token.Header["alg"])
+		}
+		return []byte(secret), nil
 	})
-	log.Println(err)
+
+	if err != nil {
+		log.Println(err)
+	}
 
 	if claims, ok := token.Claims.(jwt.MapClaims); ok && token.Valid {
-		return claims
+		return claims["uid"]
 	} else {
 		return nil
 	}

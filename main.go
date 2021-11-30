@@ -2,6 +2,7 @@ package main
 
 import (
 	"Abinash393/digital-trons-test/controller"
+	"Abinash393/digital-trons-test/db"
 	"Abinash393/digital-trons-test/middleware"
 	"Abinash393/digital-trons-test/model"
 
@@ -9,8 +10,8 @@ import (
 )
 
 func init() {
-	model.InitializeDB()
-	model.DB.AutoMigrate(&model.User{}, &model.Folder{}, &model.File{})
+	db.Initialize()
+	db.ORM.AutoMigrate(&model.User{}, &model.Folder{}, &model.File{})
 	model.Seed()
 }
 
@@ -28,7 +29,7 @@ func main() {
 	fs := api.Group("/fs")
 	fs.Use(middleware.IsAuthorized)
 	{
-
+		fs.POST("/folder", controller.CreateFolder)
 	}
 
 	router.NoRoute(controller.NotFound)

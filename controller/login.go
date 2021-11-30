@@ -1,6 +1,7 @@
 package controller
 
 import (
+	"Abinash393/digital-trons-test/db"
 	"Abinash393/digital-trons-test/model"
 	"Abinash393/digital-trons-test/util"
 	"net/http"
@@ -13,7 +14,7 @@ func Login(c *gin.Context) {
 	c.BindJSON(&currentUser)
 
 	var user model.User
-	model.DB.Where(model.User{Email: currentUser.Email}).First(&user)
+	db.ORM.Where(model.User{Email: currentUser.Email}).First(&user)
 
 	if user.CheckPassword(currentUser.Password) {
 		token := util.GenerateToken(&user)
